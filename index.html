@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>L'excuse du jour</title>
+</head>
+<body>
+<form action="excuses.php" method="post">
+    <label for="enfant">Nom de l'enfant</label><input type="text" name="enfant" id="enfant">
+    <label for="instit">Nom de la madame</label><input type="text" name="instit" id="instit">
+    <input type="radio" id="maladie" name="choix" value="maladie">Maladie</input>
+    <input type="radio" id="chat" name="choix" value="chat">Mon chat est mort</input>
+    <input type="radio" id="piscine" name="choix" value="piscine">Je peux pas j'ai piscine!</input>
+    <input type="radio" id="alf" name="choix" value="alf">Un OVNI s'est écrasé sur mon garage</input>
+    <input type="submit">Choisir votre excuse</input>
+        
+    </form>
+    <section>
+        <button type="button" id="excuse" name="btn">Choisir votre excuse</button>
+        <button type="button" id="newGame" name="newGame">Nouvelle partie?</button>
+    </section>
+</body>
+</html>
