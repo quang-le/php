@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
     $enfant=testInput($enfant);
     $instit=testInput($instit);
     $choix=testInput($choix);
-}
+
 
 // Check empty fields
 if (empty($_POST["enfant"])){
@@ -63,9 +63,9 @@ else{
 
 $intro= '<p> Madame '.$instit.',</p>';
 $corps= '<p> Mon fils '.$enfant.' ne pourra se présenter à l\'école ce '.$date.'. </p>';
-$salutations='<p> Veuillez agréer, Madame '.$instit.', l\'expression de mes salutations distinguées,</p>'
+$salutations='<p> Veuillez agréer, Madame '.$instit.', l\'expression de mes salutations distinguées,</p>';
 
-
+}
 
 ?>
 
