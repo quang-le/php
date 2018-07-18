@@ -54,6 +54,17 @@ function latinize ($word){
 echo latinize("microsphaera");
 
 
+//opposite of previous one
+//replace ae with latin character "ae"
+function delatinize ($word){
+    return str_replace("æ","ae",$word);
+}
+
+echo latinize("microsphaera");
+echo latinize("microsphæra");
+
+
+
 
 
 
