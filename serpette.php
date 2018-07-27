@@ -8,7 +8,7 @@ function switcher(){
     
     $substitutions = array( "e", "i", "o", "u", "ou", "é", "è", "oi", "ui", "oui","an","in","on","un","oin");
     $vowels='/[aeiouâêéèôæœ]/';
-    $mixers='/(ns |nt |s |st |t )+[,?;.:!]/'; 
+    $mixers='/ns |nt |s |st |t |n |m |y  |(ns |nt |s |st |t |n |m |y )+[,?;.:!]/'; // can be further optimized to maintain "liaisons"
     echo $serpette;
 
     foreach ($substitutions as $s){
