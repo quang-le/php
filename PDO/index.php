@@ -33,6 +33,11 @@
                 echo '<p>Format incorrect</p>';
             } 
         ?>
+        <?php
+            foreach($meteoFetch as $m){
+                echo '<input type="checkbox" name= location[] value='.$m['Ville'].'>'.$m['Ville'].'</input>';
+            }
+        ?>
         <input type="submit" value="Envoyer">
     </form> 
     <table>
@@ -42,15 +47,11 @@
             <th>bas</th>
         </thead>
         <tbody>
-            <form action="weatherapp.php" method="post">
-                <?php
-                    foreach($meteo as $m){
-                        echo '<tr><td>'.$m['Ville'].'</td>'.'<td>'.$m['haut'].'</td>'.'<td>'.$m['bas'].'</td></tr>';
-                        echo '<input type="checkbox" name= location[] value='.$m['Ville'].'>'.$m['Ville'].'</input>';
-                    }
-                ?>
-                <input type="submit" value="Supprimer">  
-            </form>  
+        <?php 
+            foreach($meteoFetch as $n){
+                echo '<tr><td>'.$n['Ville'].'</td>'.'<td>'.$n['haut'].'</td>'.'<td>'.$n['bas'].'</td></tr>';
+            }
+        ?>
         </tbody>
     </table>
 </body>

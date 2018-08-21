@@ -7,6 +7,7 @@ catch(Exception $e)
     die('Erreur:'.$e->getMessage());
 }
 $meteo=$db->query('SELECT * from meteo');
+$meteoFetch=$meteo->fetchAll();
 $newCity;
 $newHigh;
 $newLow;
@@ -28,10 +29,12 @@ if (!empty($_POST)){
             $erase->execute();
             $erase->closeCursor();
         }
+        if (empty($newCity) || empty($newHigh) || empty($newLow)){
         header('Location: index.php');
+        }
     }
 
-    if (!empty($newHigh) && !empty($newLow) && !empty($newCity)){
+    if (!empty($newCity && !empty($newHigh) && !empty($newLow))){
         $newHigh=(int)$newHigh;
         $newLow=(int)$newLow;
         //Sanitize
@@ -50,11 +53,11 @@ if (!empty($_POST)){
             array_push($errorLog,"city");
         }
         //Validate max temperature
-        if($newHigh>60 && empty($newHigh)){
+        if($newHigh>60){
             array_push($errorLog,"max");
         }
         //Validate min temperature
-        if($newLow<-276 && empty($newLow)){
+        if($newLow<-276){
             array_push($errorLog,"min");
         }
 
