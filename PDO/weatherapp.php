@@ -6,57 +6,85 @@ catch(Exception $e)
 {
     die('Erreur:'.$e->getMessage());
 }
-
-if (isset($_POST)){
-$newCity=$_POST['ville'];
-$newHigh=$_POST['haut'];
-$newHigh=(int)$newHigh;
-$newLow=$_POST['bas'];
-$newLow=(int)$newLow;
-$sql='INSERT INTO meteo (Ville,haut,bas) VALUES ('.$newCity.','.$newHigh.','.$newLow.')';
-$db->exec($sql);
-
 $meteo=$db->query('SELECT * from meteo');
-$dataSet=$meteo->fetch();
-// print_r($dataSet);
+$newCity;
+$newHigh;
+$newLow;
 
+if (!empty($_POST)){
+    $newCity=$_POST['ville'];
+    $newHigh=$_POST['haut'];   
+    $newLow=$_POST['bas'];
+    $address='index.php?status=false';
+    $errorLog=[];
+    $toDelete=$_POST['location'];
+    //var_dump($toDelete);
+
+    //Delete with checkbox
+    if (!empty($toDelete)){
+        foreach($toDelete as $delete){
+            $erase=$db->prepare('DELETE FROM meteo WHERE Ville= :toDelete');
+            $erase->bindParam(':toDelete',$delete);
+            $erase->execute();
+            $erase->closeCursor();
+        }
+        header('Location: index.php');
+    }
+
+    if (!empty($newHigh) && !empty($newLow) && !empty($newCity)){
+        $newHigh=(int)$newHigh;
+        $newLow=(int)$newLow;
+        //Sanitize
+        $newCity=filter_var($newCity,FILTER_SANITIZE_STRING);
+        // Somehow the FLOAT filter messes the whole thing up
+        // $newHigh=filter_var($newCity,FILTER_SANITIZE_NUMBER_FLOAT);  
+        // $newLow=filter_var($newCity,FILTER_SANITIZE_NUMBER_FLOAT);
+
+
+        //Validate city name
+        $newCity=trim($newCity);
+        if (!empty($newCity)){
+            $newCity=ucfirst($newCity);
+        }
+        else{
+            array_push($errorLog,"city");
+        }
+        //Validate max temperature
+        if($newHigh>60 && empty($newHigh)){
+            array_push($errorLog,"max");
+        }
+        //Validate min temperature
+        if($newLow<-276 && empty($newLow)){
+            array_push($errorLog,"min");
+        }
+
+        //Routing according to errors
+        if (empty($errorLog)==false){
+            foreach($errorLog as $error){
+                $address.='&'.$error.'=false';
+            }
+            header('Location: '.$address);
+        }
+        else{
+            global $db;
+            global $newCity;
+            global $newHigh;
+            global $newLow;
+            $sql='INSERT INTO meteo (Ville,haut,bas) VALUES (:newCity,:newHigh,:newLow)';
+            $newData=$db->prepare($sql);
+        
+            $newData->bindParam(':newCity',$newCity);
+            $newData->bindParam(':newHigh',$newHigh);
+            $newData->bindParam(':newLow',$newLow);
+            $newData->execute();
+            header('Location: index.php');
+            
+        }
+    }
+    // var_dump($meteo);
+    // $dataSet=$meteo->fetchAll();
+    // print_r($dataSet);
 }
 
 ?>
 
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>SQL -PDO</title>
-</head>
-<body>
-    <form action="#" method="POST">
-        <label for="ville">Ville</label>
-        <input type="text" name="ville">
-        <label for="haut">Maxima</label>
-        <input type="text" name="haut">
-        <label for="bas">Minima</label>
-        <input type="text" name="bas">
-        <input type="submit" value="Envoyer">
-    </form> 
-    <table>
-        <thead>
-            <th>Ville</th>
-            <th>haut</th>
-            <th>bas</th>
-        </thead>
-        <tbody>
-            <?php
-             while ($dataSet=$meteo->fetch()){
-                print_r($dataSet);
-                echo '<tr><td>'.$dataSet[Ville].'</td>'.'<td>'.$dataSet[haut].'</td>'.'<td>'.$dataSet[bas].'</td></tr>';
-                echo '<input type="checkbox" name='.$dataSet[Ville].' value='.$dataSet[Ville].'>'.$dataSet[Ville].'</input>';
-             }
-            ?>
-        </tbody>
-    </table>
-</body>
-</html>
